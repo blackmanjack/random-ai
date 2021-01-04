@@ -5,7 +5,7 @@ import csv
 from collections import deque
 
 # // Get data
-CsvPath = '/home/nufik/Documents/Kuliah/Tugas/AI/data.csv'
+CsvPath = '/home/nufik/Documents/Kuliah/Tugas/AI/data_dummy.csv'
 getData = open(CsvPath)
 initData = csv.reader(getData)
 documents = []
@@ -91,9 +91,14 @@ class AVL_Tree(object):
         global isDocumentExist
         if not root:
             return
+
+        if isDocumentExist == False:
+            print(f'Node yang ditelusuri -> {root.val}')
+
         if root.val == target:
             isDocumentExist = True
-        print(f'Node yang ditelusuri -> {root.val}')
+            print('-----STOP---')
+
         self.depthFirstSearch(root.left, target)
         self.depthFirstSearch(root.right, target)
 
@@ -103,9 +108,12 @@ class AVL_Tree(object):
         while queue:
             global isDocumentExist
             curr = queue.popleft()
-            # print(curr.val, end=' ')
+            if isDocumentExist == False:
+                print(f'Node yang ditelusuri -> {curr.val}')
+
             if curr.val == target:
                 isDocumentExist = True
+                print('-----STOP---')
             if curr.left:
                 queue.append(curr.left)
             if curr.right:
@@ -116,25 +124,30 @@ myTree = AVL_Tree()
 root = None
 
 # // Properties!
-target = 739322206
+target = 24
 isDocumentExist = False
 
 # // Create the AVL Tree! (Insertion)
 for index, document in enumerate(documents):
     if index != 0:
         isbn = document[4]
-        root = myTree.insert(root, isbn)
+        id = document[0]
+        root = myTree.insert(root, id)
 
 # // Search a document with Dept First Search
-# // myTree.depthFirstSearch(root, target)
+print('DFS')
+myTree.depthFirstSearch(root, target)
+isDocumentExist = False
+print()
+print('BFS')
 myTree.bestFirstSearch(root, target)
-
+print()
 # // The result
 if isDocumentExist == True:
-    print('-------------------------------------------------------------------------------')
+    # print('-------------------------------------------------------------------------------')
     print("Document status : Ditemukan")
     for document in documents:
-        if document[4] == target:
+        if document[0] == target:
             print(document)
 else:
     print('-------------------------------------------------------------------------------')
